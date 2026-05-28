@@ -9617,7 +9617,7 @@ SDValue PPCTargetLowering::LowerBUILD_VECTOR(SDValue Op,
   }
   // Check if this is a splat of a constant value.
   APInt APSplatBits, APSplatUndef;
-  unsigned SplatBitSize;
+  unsigned SplatBitSize = 0;
   bool HasAnyUndefs;
   bool BVNIsConstantSplat =
       BVN->isConstantSplat(APSplatBits, APSplatUndef, SplatBitSize,

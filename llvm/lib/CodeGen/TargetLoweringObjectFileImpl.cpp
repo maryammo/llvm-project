@@ -2948,8 +2948,7 @@ MCSection *TargetLoweringObjectFileGOFF::getSectionForLSDA(
   std::string Name = "GCC_except." + F.getName().str();
 
   MCSectionGOFF *SD = getContext().getGOFFSection(
-      SectionKind::getMetadata(), Name,
-      GOFF::SDAttr{GOFF::ESD_TA_Unspecified, GOFF::ESD_BSC_Section});
+      SectionKind::getMetadata(), Name, GOFF::SDAttr{GOFF::ESD_TA_Unspecified});
   MCSectionGOFF *WSA = getContext().getGOFFSection(
       SectionKind::getMetadata(), GOFF::CLASS_WSA,
       GOFF::EDAttr{false, GOFF::ESD_RMODE_64, GOFF::ESD_NS_Parts,
@@ -2977,9 +2976,6 @@ MCSection *TargetLoweringObjectFileGOFF::SelectSectionForGlobal(
             ? (GO->hasDefaultVisibility() ? GOFF::ESD_BSC_ImportExport
                                           : GOFF::ESD_BSC_Library)
             : GOFF::ESD_BSC_Section;
-    GOFF::ESDBindingScope SDBindingScope =
-        PRBindingScope == GOFF::ESD_BSC_Section ? GOFF::ESD_BSC_Section
-                                                : GOFF::ESD_BSC_Unspecified;
     MaybeAlign Alignment;
     if (auto *F = dyn_cast<Function>(GO))
       Alignment = F->getAlign();
@@ -2987,7 +2983,7 @@ MCSection *TargetLoweringObjectFileGOFF::SelectSectionForGlobal(
       Alignment = V->getAlign();
     MCSectionGOFF *SD = getContext().getGOFFSection(
         SectionKind::getMetadata(), Symbol->getName(),
-        GOFF::SDAttr{GOFF::ESD_TA_Unspecified, SDBindingScope});
+        GOFF::SDAttr{GOFF::ESD_TA_Unspecified});
     MCSectionGOFF *ED = getContext().getGOFFSection(
         SectionKind::getMetadata(), GOFF::CLASS_WSA,
         GOFF::EDAttr{false, GOFF::ESD_RMODE_64, GOFF::ESD_NS_Parts,
